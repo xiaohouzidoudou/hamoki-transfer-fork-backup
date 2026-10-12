@@ -7,12 +7,7 @@ on:
         description: Optional release tag created by Release Please
         required: false
         type: string
-  push:
-    branches:
-      - master
-      - dev
-    tags:
-      - 'v*'
+  # No automatic images on upstream-derived commits. Manual release only.
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKER_USERNAME }}/filecodebox
