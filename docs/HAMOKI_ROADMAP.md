@@ -1,6 +1,6 @@
 # Hamoki 快传 · 二次开发计划
 
-上游项目：[`vastsa/FileCodeBox`](https://github.com/vastsa/FileCodeBox)  
+初始代码来源（仅作版权归属说明）：[`vastsa/FileCodeBox`](https://github.com/vastsa/FileCodeBox)  
 项目名称：**Hamoki 快传（Hamoki Transfer）**
 
 ## 产品目标
@@ -36,7 +36,10 @@
 
 ## 开发约束
 
-- 保留原仓库 Git/Fork 关系，定期检查上游兼容更新。
+- **自主维护，禁止例行同步上游**：不使用 GitHub 的 Sync fork，不拉取/合并 `vastsa/FileCodeBox` 后续提交，不以其发布节奏为准。仓库保留 Fork 标记仅作来源记录，不代表自动更新。
+- 以后所有功能、Bug 修复、安全修复、依赖升级、版本号、构建和发布均由 Hamoki 项目自行决定。除非项目所有者另行明确要求，不引入上游更新。
+- **独立化阻断项（上线前）**：原 `Dockerfile` 仍会从 `vastsa/FileCodeBoxFronted`、`vastsa/FileCodeBoxFronted2023` 拉取前端代码；`.github/workflows/docker-image.yml` 还会请求两处外部 HEAD；`docker-compose.yml` 默认拉取 `lanol/filecodebox` 官方镜像。以上必须改为 Hamoki 自己维护并固定版本的代码及镜像，再作为 Hamoki 正式版本部署。
+- **发布策略**：现有 `release.yml` 在主分支推送后可能触发 Release Please 自动创建与合并发布 PR，后续应改为我们审批后发布；依赖更新也必须经测试和审核，不自动合并。
 - 自定义代码优先保持模块化；不破坏上游已有文件上传、权限和过期清理机制。
 - 在独立 `feat/hamoki-transfer` 分支开发，完成测试再合并。
 - 现阶段仅建立二次开发基线，**尚未部署，也未宣称上述功能已经实现**。
