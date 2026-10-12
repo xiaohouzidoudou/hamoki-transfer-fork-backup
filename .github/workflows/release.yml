@@ -1,9 +1,7 @@
 name: Create release
 
+# Hamoki release requires explicit owner approval.
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
 
 permissions:
@@ -28,25 +26,8 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      - name: Merge release pull request
-        if: ${{ steps.release.outputs.prs_created == 'true' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          RELEASE_PR_JSON: ${{ steps.release.outputs.pr }}
-        run: |
-          RELEASE_PR="$(jq -r '.number' <<< "$RELEASE_PR_JSON")"
-          for attempt in {1..120}; do
-            if gh pr merge "$RELEASE_PR" --squash --delete-branch; then
-              break
-            fi
-            if [[ "$attempt" -eq 120 ]]; then
-              echo "Timed out waiting for release PR #$RELEASE_PR to merge" >&2
-              exit 1
-            fi
-            sleep 10
-          done
-          gh workflow run release.yml --ref master
+
+      # Automatic release PR merges intentionally removed.
 
       - name: Publish release image
         if: ${{ steps.release.outputs.release_created == 'true' }}
