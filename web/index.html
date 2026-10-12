@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f8fb" />
+  <meta name="description" content="Hamoki 快传，打开网页就能传文件。无需安装客户端，扫码或输入取件码即可领取。" />
+  <title>Hamoki 快传 · 轻松传文件</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+  <script defer src="/assets/app.js"></script>
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="/" aria-label="Hamoki 快传首页"><span class="logo">🐒</span><span>Hamoki <em>快传</em></span></a>
+    <button id="admin-nav" class="ghost small" type="button">管理</button>
+  </header>
+  <main class="wrap main">
+    <section class="hero">
+      <div class="eyebrow">HAMOKI TRANSFER</div>
+      <h1>文件传递，<span>就这么简单。</span></h1>
+      <p>无需安装软件。上传生成取件码，手机扫码直接领，设备不必同时在线。</p>
+    </section>
+    <section class="app-card" id="app-card">
+      <div class="tabs" role="tablist" aria-label="文件传递">
+        <button id="tab-send" class="tab active" role="tab" aria-selected="true">↑ 寄文件</button>
+        <button id="tab-receive" class="tab" role="tab" aria-selected="false">↓ 取文件</button>
+      </div>
+      <section id="send-view" class="pane" aria-label="寄文件">
+        <div class="drop" id="drop-area">
+          <div class="drop-icon" aria-hidden="true">⇧</div>
+          <div class="drop-title">拖进来，或者选择文件</div>
+          <p>图片、视频、文档、压缩包都可以</p>
+          <button id="choose-file" class="primary" type="button">选择文件</button>
+          <input id="file-input" type="file" hidden />
+          <div class="file-name" id="file-name"></div>
+        </div>
+        <div class="or">或者传一段文字</div>
+        <textarea id="send-text" rows="3" placeholder="链接、代码、临时文字也可以直接粘贴……" aria-label="待传送的文字"></textarea>
+        <div class="options">
+          <label for="expire">有效时间</label>
+          <select id="expire"><option value="hour:1">1 小时</option><option value="day:1" selected>24 小时</option><option value="day:7">7 天</option></select>
+        </div>
+        <button id="send-button" class="primary wide" type="button">开始传送 <span aria-hidden="true">→</span></button>
+        <p id="upload-hint" class="hint">上传需经站点允许。管理员可以开启匿名上传或使用口令解锁。</p>
+        <div id="progress-wrap" class="progress-wrap" hidden><progress id="progress" max="100" value="0"></progress><span id="progress-label">准备上传</span></div>
+      </section>
+      <section id="receive-view" class="pane" aria-label="取文件" hidden>
+        <p class="intro">输入别人发给你的取件码，文件就会出现在这里。</p>
+        <label class="field-label" for="pickup-code">临时取件码</label>
+        <input id="pickup-code" inputmode="text" autocomplete="off" spellcheck="false" maxlength="80" placeholder="输入取件码" />
+        <button id="lookup-button" class="primary wide" type="button">查找文件 →</button>
+        <div id="pickup-result" class="result" hidden>
+          <strong id="pickup-name"></strong>
+          <span id="pickup-details"></span>
+          <a id="download-button" class="primary as-link" href="#" rel="nofollow">领取文件 ↓</a>
+        </div>
+      </section>
+      <section id="success-view" class="pane" aria-label="上传成功" hidden>
+        <div class="success-icon">✓</div>
+        <h2>传好了！</h2><p class="intro">另一台设备打开网页输入取件码，或直接扫码领取。</p>
+        <p class="field-label">你的取件码</p>
+        <div class="code-row"><strong id="result-code"></strong><button id="copy-code" class="ghost small" type="button">复制</button></div>
+        <div class="qr-card"><canvas id="result-qr" width="190" height="190" role="img" aria-label="文件领取二维码"></canvas></div>
+        <div class="button-line"><button id="copy-link" class="primary" type="button">复制领取链接</button><button id="send-again" class="ghost" type="button">继续传送</button></div>
+      </section>
+      <section id="admin-view" class="pane" aria-label="管理设置" hidden>
+        <h2>管理 Hamoki 快传</h2><p class="intro">只有管理员可以设置上传权限和查看文件。</p>
+        <div id="login-panel">
+          <label class="field-label" for="admin-password">管理员密码</label>
+          <input id="admin-password" type="password" autocomplete="current-password" placeholder="输入管理员密码" />
+          <button id="login-button" class="primary wide" type="button">解锁管理</button>
+        </div>
+        <div id="dashboard-panel" hidden>
+          <div class="stat-grid"><div><strong id="files-count">—</strong><small>文件数</small></div><div><strong id="storage-size">—</strong><small>已占空间</small></div></div>
+          <label class="toggle"><span>允许匿名上传 <small>公开网站建议关闭，防止被滥用</small></span><input id="allow-guest" type="checkbox" /></label>
+          <div class="button-line"><button id="save-settings" class="primary" type="button">保存设置</button><button id="logout-button" class="ghost" type="button">退出管理</button></div>
+          <h3>最近文件</h3><ul id="recent-files" class="recent-files"></ul>
+        </div>
+      </section>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+    <p class="footer-note">传送不必同时在线 · 过期自动清理 · Hamoki 开源快传</p>
+  </main>
+  <footer class="site-footer wrap"><span>© Hamoki Transfer</span><a href="https://github.com/xiaohouzidoudou/hamoki-transfer" target="_blank" rel="noopener noreferrer">GitHub 开源项目 ↗</a></footer>
+</body>
+</html>
