@@ -28,7 +28,8 @@ htmlcov/
 ._*
 
 # Frontend source (will be built from GitHub)
-fcb-fronted/
+web/node_modules/
+web/dist/
 themes/
 
 # Test files
